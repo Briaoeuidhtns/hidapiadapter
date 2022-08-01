@@ -1,6 +1,6 @@
 # hidapi adapter
 
-This project was created to port popular library, that helps to interact with HID devices - hidapi (C language) https://github.com/signal11/hidapi
+This project was created to port popular library, that helps to interact with HID devices - hidapi (C language) https://github.com/libusb/hidapi
 
 The main goal of project is to make library that adapted to C#
 
@@ -49,14 +49,3 @@ To interact with devices use methods Read\Write. Here example
 ## Nuget
 
 `Install-Package HidApiAdapter`
-
-If you getting DllNotFoundException: ... DLL "hidapi32"
-
-Change properties of installed dlls - hidapi32.dll hidapi64.dll like on screenshot
-
-![image](https://user-images.githubusercontent.com/14893576/50458730-72e65780-0976-11e9-9d46-1d4874083586.png)
-
-
-
-
-

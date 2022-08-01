@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace HidApiAdapter
 {
-    internal class HidApiWin32
+    internal class HidApiWin
     {
         #region Native Methods
 
-        public const string DLL_FILE_NAME = "hidapi32";
+        public const string DLL_FILE_NAME = "hidapi";
 
         [DllImport(DLL_FILE_NAME, CallingConvention = CallingConvention.Cdecl)]
         public static extern int hid_init();

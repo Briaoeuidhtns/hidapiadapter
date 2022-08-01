@@ -9,9 +9,9 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>hid usb hidapi</PackageTags>
     <Authors />
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <Description>This project was created to port popular library, that hepls to interact with HID devices - hidapi (C language) https://github.com/signal11/hidapi</Description>
+    <Description>This project was created to port popular library, that helps to interact with HID devices - hidapi (C language) https://github.com/libusb/hidapi</Description>
     <Version>1.0.5</Version>
     <AssemblyVersion>1.0.5.0</AssemblyVersion>
     <ApplicationIcon />
@@ -36,25 +36,25 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="hidapi32.dll" />
-    <None Remove="hidapi64.dll" />
-  </ItemGroup>
+  <PropertyGroup>
+    <HidApiVersion>0.12.0</HidApiVersion>
+    <HidApiUrl>https://github.com/libusb/hidapi/releases/download/hidapi-$(HidApiVersion)/hidapi-win.zip</HidApiUrl>
+  </PropertyGroup>
 
+  <Target Name="DownloadDlls" BeforeTargets="Build" >
+    <DownloadFile
+      SourceUrl="$(HidApiUrl)"
+      DestinationFolder="$(BaseIntermediateOutputPath)">
+      <Output TaskParameter="DownloadedFile" PropertyName="HidApiRelease" />
+    </DownloadFile>
+    <Unzip
+      SourceFiles="$(HidApiRelease)"
+      DestinationFolder="$(BaseIntermediateOutputPath)hidapi" />
   <ItemGroup>
-    <Content Include="hidapi32.dll">
-      <IncludeInPackage>true</IncludeInPackage>
-      <CopyToOutput>true</CopyToOutput>
-      <BuildAction>Content</BuildAction>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="hidapi64.dll">
-      <IncludeInPackage>true</IncludeInPackage>
-      <CopyToOutput>true</CopyToOutput>
-      <BuildAction>Content</BuildAction>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+      <Content Include="$(BaseIntermediateOutputPath)hidapi\x86\hidapi.dll" Pack="true" PackagePath="runtimes\win-x86\native" />
+      <Content Include="$(BaseIntermediateOutputPath)hidapi\x64\hidapi.dll" Pack="true" PackagePath="runtimes\win-x64\native" />
   </ItemGroup>
+  </Target>
 
   <ItemGroup>
     <Folder Include="Properties\" />

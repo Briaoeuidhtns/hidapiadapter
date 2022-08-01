@@ -6,39 +6,8 @@ using System.Text;
 
 namespace HidApiAdapter
 {
-
-    /// <summary>
-    /// Type of operation system
-    /// </summary>
-    internal enum OsType
-    {
-        Unknown,
-        Win32,
-        Win64
-
-        //TODO add linux and another OS types
-    }
-
     public class HidApi
     {
-        private const string CANNOT_RESOLVE_OS_TYPE_MESSAGE = "hidapi adapter cannot resolve OS type";
-        private static OsType m_OsType;
-
-        private static void ResolveOsType()
-        {
-            if (IntPtr.Size == 8)
-                m_OsType = OsType.Win64;
-            else if (IntPtr.Size == 4)
-                m_OsType = OsType.Win32;
-            else
-                throw new NotSupportedException(CANNOT_RESOLVE_OS_TYPE_MESSAGE);
-        }
-
-        static HidApi()
-        {
-            ResolveOsType();
-        }
-
         /// <summary>
         /// Initialize the HIDAPI library.
         /// This function initializes the HIDAPI library.
@@ -48,12 +17,7 @@ namespace HidApiAdapter
         /// <returns>This function returns 0 on success and -1 on error</returns>
         public static int hid_init()
         {
-            if (m_OsType == OsType.Win32)
-                return HidApiWin32.hid_init();
-            else if (m_OsType == OsType.Win64)
-                return HidApiWin64.hid_init();
-            else
-                throw new NotSupportedException(CANNOT_RESOLVE_OS_TYPE_MESSAGE);
+            return HidApiWin.hid_init();
         }
 
         /// <summary>
@@ -64,12 +28,7 @@ namespace HidApiAdapter
         /// <returns>This function returns 0 on success and -1 on error.</returns>
         public static int hid_exit()
         {
-            if (m_OsType == OsType.Win32)
-                return HidApiWin32.hid_exit();
-            else if (m_OsType == OsType.Win64)
-                return HidApiWin64.hid_exit();
-            else
-                throw new NotSupportedException(CANNOT_RESOLVE_OS_TYPE_MESSAGE);
+            return HidApiWin.hid_exit();
         }
 
         /// <summary>
@@ -87,12 +46,7 @@ namespace HidApiAdapter
         /// </returns>
         public static IntPtr hid_enumerate(ushort vendor_id, ushort product_id)
         {
-            if (m_OsType == OsType.Win32)
-                return HidApiWin32.hid_enumerate(vendor_id, product_id);
-            else if (m_OsType == OsType.Win64)
-                return HidApiWin64.hid_enumerate(vendor_id, product_id);
-            else
-                throw new NotSupportedException(CANNOT_RESOLVE_OS_TYPE_MESSAGE);
+            return HidApiWin.hid_enumerate(vendor_id, product_id);
         }
 
         /// <summary>
@@ -102,12 +56,7 @@ namespace HidApiAdapter
         /// <param name="devs">Pointer to a list of struct_device returned from hid_enumerate().</param>
         public static void hid_free_enumeration(IntPtr devs)
         {
-            if (m_OsType == OsType.Win32)
-                HidApiWin32.hid_free_enumeration(devs);
-            else if (m_OsType == OsType.Win64)
-                HidApiWin64.hid_free_enumeration(devs);
-            else
-                throw new NotSupportedException(CANNOT_RESOLVE_OS_TYPE_MESSAGE);
+            HidApiWin.hid_free_enumeration(devs);
         }
 
         /// <summary>
@@ -120,12 +69,7 @@ namespace HidApiAdapter
         /// <returns>This function returns a pointer to a hid_device object on success or NULL on failure</returns>
         public static IntPtr hid_open(ushort vendor_id, ushort product_id, string serial_number)
         {
-            if (m_OsType == OsType.Win32)
-                return HidApiWin32.hid_open(vendor_id, product_id, serial_number);
-            else if (m_OsType == OsType.Win64)
-                return HidApiWin64.hid_open(vendor_id, product_id, serial_number);
-            else
-                throw new NotSupportedException(CANNOT_RESOLVE_OS_TYPE_MESSAGE);
+            return HidApiWin.hid_open(vendor_id, product_id, serial_number);
         }
 
         /// <summary>
@@ -136,12 +80,7 @@ namespace HidApiAdapter
         /// <returns>This function returns a pointer to a hid_device object on success or NULL on failure</returns>
         public static IntPtr hid_open_path(IntPtr path)
         {
-            if (m_OsType == OsType.Win32)
-                return HidApiWin32.hid_open_path(path);
-            else if (m_OsType == OsType.Win64)
-                return HidApiWin64.hid_open_path(path);
-            else
-                throw new NotSupportedException(CANNOT_RESOLVE_OS_TYPE_MESSAGE);
+            return HidApiWin.hid_open_path(path);
 
         }
 
@@ -160,12 +99,7 @@ namespace HidApiAdapter
         /// <returns>This function returns the actual number of bytes written and -1 on error</returns>
         public static int hid_write(IntPtr device, byte[] data, uint length)
         {
-            if (m_OsType == OsType.Win32)
-                return HidApiWin32.hid_write(device, data, length);
-            else if (m_OsType == OsType.Win64)
-                return HidApiWin64.hid_write(device, data, length);
-            else
-                throw new NotSupportedException(CANNOT_RESOLVE_OS_TYPE_MESSAGE);
+            return HidApiWin.hid_write(device, data, length);
         }
 
         /// <summary>
@@ -183,12 +117,7 @@ namespace HidApiAdapter
         /// </returns>
         public static int hid_read_timeout(IntPtr device, byte[] data, uint length, int milliseconds)
         {
-            if (m_OsType == OsType.Win32)
-                return HidApiWin32.hid_read_timeout(device, data, length, milliseconds);
-            else if (m_OsType == OsType.Win64)
-                return HidApiWin64.hid_read_timeout(device, data, length, milliseconds);
-            else
-                throw new NotSupportedException(CANNOT_RESOLVE_OS_TYPE_MESSAGE);
+            return HidApiWin.hid_read_timeout(device, data, length, milliseconds);
         }
 
         /// <summary>
@@ -205,12 +134,7 @@ namespace HidApiAdapter
         /// </returns>
         public static int hid_read(IntPtr device, byte[] data, uint length)
         {
-            if (m_OsType == OsType.Win32)
-                return HidApiWin32.hid_read(device, data, length);
-            else if (m_OsType == OsType.Win64)
-                return HidApiWin64.hid_read(device, data, length);
-            else
-                throw new NotSupportedException(CANNOT_RESOLVE_OS_TYPE_MESSAGE);
+            return HidApiWin.hid_read(device, data, length);
         }
 
         /// <summary>
@@ -224,12 +148,7 @@ namespace HidApiAdapter
         /// <returns>This function returns 0 on success and -1 on error</returns>
         public int hid_set_nonblocking(IntPtr device, int nonblock)
         {
-            if (m_OsType == OsType.Win32)
-                return HidApiWin32.hid_set_nonblocking(device, nonblock);
-            else if (m_OsType == OsType.Win64)
-                return HidApiWin64.hid_set_nonblocking(device, nonblock);
-            else
-                throw new NotSupportedException(CANNOT_RESOLVE_OS_TYPE_MESSAGE);
+            return HidApiWin.hid_set_nonblocking(device, nonblock);
         }
 
         /// <summary>
@@ -247,12 +166,7 @@ namespace HidApiAdapter
         /// <returns>This function returns the actual number of bytes written and -1 on error</returns>
         public static int hid_send_feature_report(IntPtr device, byte[] data, uint length)
         {
-            if (m_OsType == OsType.Win32)
-                return HidApiWin32.hid_send_feature_report(device, data, length);
-            else if (m_OsType == OsType.Win64)
-                return HidApiWin64.hid_send_feature_report(device, data, length);
-            else
-                throw new NotSupportedException(CANNOT_RESOLVE_OS_TYPE_MESSAGE);
+            return HidApiWin.hid_send_feature_report(device, data, length);
         }
 
         /// <summary>
@@ -270,13 +184,7 @@ namespace HidApiAdapter
         /// <returns>This function returns the number of bytes read plus one for the report ID (which is still in the first byte), or -1 on error</returns>
         public static int hid_get_feature_report(IntPtr device, byte[] data, uint length)
         {
-            if (m_OsType == OsType.Win32)
-                return HidApiWin32.hid_get_feature_report(device, data, length);
-            else if (m_OsType == OsType.Win64)
-                return HidApiWin64.hid_get_feature_report(device, data, length);
-            else
-                throw new NotSupportedException(CANNOT_RESOLVE_OS_TYPE_MESSAGE);
-
+            return HidApiWin.hid_get_feature_report(device, data, length);
         }
 
         /// <summary>
@@ -285,12 +193,7 @@ namespace HidApiAdapter
         /// <param name="device">A device handle returned from hid_open()</param>
         public static void hid_close(IntPtr device)
         {
-            if (m_OsType == OsType.Win32)
-                HidApiWin32.hid_close(device);
-            else if (m_OsType == OsType.Win64)
-                HidApiWin64.hid_close(device);
-            else
-                throw new NotSupportedException(CANNOT_RESOLVE_OS_TYPE_MESSAGE);
+                HidApiWin.hid_close(device);
         }
 
         /// <summary>
@@ -302,12 +205,7 @@ namespace HidApiAdapter
         /// <returns>This function returns 0 on success and -1 on error</returns>
         public static int hid_get_manufacturer_string(IntPtr device, StringBuilder str, uint length)
         {
-            if (m_OsType == OsType.Win32)
-                return HidApiWin32.hid_get_manufacturer_string(device, str, length);
-            else if (m_OsType == OsType.Win64)
-                return HidApiWin64.hid_get_manufacturer_string(device, str, length);
-            else
-                throw new NotSupportedException(CANNOT_RESOLVE_OS_TYPE_MESSAGE);
+            return HidApiWin.hid_get_manufacturer_string(device, str, length);
         }
 
         /// <summary>
@@ -319,13 +217,7 @@ namespace HidApiAdapter
         /// <returns>This function returns 0 on success and -1 on error</returns>
         public static int hid_get_product_string(IntPtr device, StringBuilder str, uint length)
         {
-            if (m_OsType == OsType.Win32)
-                return HidApiWin32.hid_get_product_string(device, str, length);
-            else if (m_OsType == OsType.Win64)
-                return HidApiWin64.hid_get_product_string(device, str, length);
-            else
-                throw new NotSupportedException(CANNOT_RESOLVE_OS_TYPE_MESSAGE);
-
+            return HidApiWin.hid_get_product_string(device, str, length);
         }
 
         /// <summary>
@@ -337,12 +229,7 @@ namespace HidApiAdapter
         /// <returns>This function returns 0 on success and -1 on error</returns>
         public static int hid_get_serial_number_string(IntPtr device, StringBuilder serial, uint maxlen)
         {
-            if (m_OsType == OsType.Win32)
-                return HidApiWin32.hid_get_serial_number_string(device, serial, maxlen);
-            else if (m_OsType == OsType.Win64)
-                return HidApiWin64.hid_get_serial_number_string(device, serial, maxlen);
-            else
-                throw new NotSupportedException(CANNOT_RESOLVE_OS_TYPE_MESSAGE);
+            return HidApiWin.hid_get_serial_number_string(device, serial, maxlen);
         }
 
         /// <summary>
@@ -355,13 +242,7 @@ namespace HidApiAdapter
         /// <returns>This function returns 0 on success and -1 on error.</returns>
         public static int hid_get_indexed_string(IntPtr device, int string_index, StringBuilder str, uint maxlen)
         {
-            if (m_OsType == OsType.Win32)
-                return HidApiWin32.hid_get_indexed_string(device, string_index, str, maxlen);
-            else if (m_OsType == OsType.Win64)
-                return HidApiWin64.hid_get_indexed_string(device, string_index, str, maxlen);
-            else
-                throw new NotSupportedException(CANNOT_RESOLVE_OS_TYPE_MESSAGE);
-
+            return HidApiWin.hid_get_indexed_string(device, string_index, str, maxlen);
         }
 
         /// <summary>
@@ -371,14 +252,7 @@ namespace HidApiAdapter
         /// <returns>This function returns a string containing the last error which occurred or NULL if none has occurred.</returns>
         public static IntPtr hid_error(IntPtr device)
         {
-            if (m_OsType == OsType.Win32)
-                return HidApiWin32.hid_error(device);
-            else if (m_OsType == OsType.Win64)
-                return HidApiWin64.hid_error(device);
-            else
-                throw new NotSupportedException(CANNOT_RESOLVE_OS_TYPE_MESSAGE);
+                return HidApiWin.hid_error(device);
         }
-
-
     }
 }
